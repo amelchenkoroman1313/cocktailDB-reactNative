@@ -1,41 +1,45 @@
-import {cocktailAPI} from '../actions/fetch-data/fetch-data';
-
-const SET_DRINKS = 'SET_DRINKS';
-const TOGGLE_IS_FETCHING = 'TOGGLE_IS_FETCHING';
+import {
+  FETCH_DATA_ERROR,
+  FETCH_DATA_REQUEST,
+  FETCH_DATA_SUCCESS,
+} from '../constants/action-types';
 
 const initialState = {
-  drinks: [],
+  drinksInfo: [],
   isFetching: true,
+  error: null,
 };
 
-const drinkReducer = (state = initialState, action) => {
+export const getDrinksSelector = (state) => ({...state.drinksPage});
+
+
+const drinksReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SET_DRINKS: {
-      return {...state, drinks: action.drinks};
+    case FETCH_DATA_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        error: null,
+        drinksInfo: [...state.drinksInfo, action.payload],
+      };
     }
-    case TOGGLE_IS_FETCHING: {
-      return {...state, isFetching: action.isFetching};
+    case FETCH_DATA_REQUEST: {
+      return {
+        ...state,
+        isLoading: true,
+      };
     }
-    default:
+    case FETCH_DATA_ERROR: {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload.error,
+      };
+    }
+    default: {
       return state;
+    }
   }
-}
-
-export const setDrinks = (drinks) => ({type: SET_DRINKS, drinks});
-export const toggleIsFetching = (isFetching) => ({
-  type: TOGGLE_IS_FETCHING,
-  isFetching,
-});
-
-export const requestDrinks = () => {
-  return async (dispatch) => {
-    dispatch(toggleIsFetching(true));
-
-    let data = await cocktailAPI.getDrinks();
-    dispatch(setDrinks(data.items));
-  };
 };
 
-export default drinkReducer;
-
-
+export default drinksReducer;

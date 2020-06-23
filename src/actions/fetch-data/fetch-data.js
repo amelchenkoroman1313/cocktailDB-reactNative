@@ -1,12 +1,19 @@
-import {fetchDrinksData} from '../../services/requests';
 import {fetchDataError} from './fetch-data-error';
 import {fetchDataRequest} from './fetch-data-request';
 import {fetchDataSuccess} from './fetch-data-success';
+import axios from 'axios';
+import config from '../../lib/config';
 
-export const fetchData = () => (dispatch: Function) => {
-  dispatch(fetchDataRequest());
-  return fetchDrinksData
-    .getDrinks()
-    .then((drinks) => dispatch(fetchDataSuccess(drinks)))
-    .catch(() => dispatch(fetchDataError()));
+export const fetchData = ({drinks}) => {
+  return (dispatch) => {
+    dispatch(fetchDataRequest());
+    axios
+      .get(config.API_URL, {})
+      .then((res) => {
+        dispatch(fetchDataSuccess(res.data));
+      })
+      .catch((err) => {
+        dispatch(fetchDataError(err.message));
+      });
+  };
 };

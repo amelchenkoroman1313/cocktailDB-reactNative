@@ -9,7 +9,7 @@ const FilterScreen = ({navigation}) => {
     <SafeAreaView>
       <View style={styles.mainView}>
         <Text>Filter</Text>
-          <CocktailListContainer />
+        <CocktailListContainer />
         <Button onPress={() => navigation.goBack()} title="Dismiss" />
       </View>
     </SafeAreaView>

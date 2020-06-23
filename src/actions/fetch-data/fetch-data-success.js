@@ -2,7 +2,9 @@
 
 import {FETCH_DATA_SUCCESS} from '../../constants/action-types';
 
-export const fetchDataSuccess = (drinks: Object) => ({
+export const fetchDataSuccess = (drinksInfo) => ({
   type: FETCH_DATA_SUCCESS,
-  payload: {drinks},
+  payload: {
+    ...drinksInfo,
+  },
 });
